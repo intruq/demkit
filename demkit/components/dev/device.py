@@ -14,12 +14,15 @@
 
 
 from core.entity import Entity
+from components.util.csvLog import *
 
 import threading
 
 class Device(Entity):
 	def __init__(self,  name,  host):
 		Entity.__init__(self,  name, host)
+
+		printToConsole("Device Created: " + self.name)
 
 		self.timeOffset = 0
 
