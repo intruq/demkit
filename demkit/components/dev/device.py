@@ -22,8 +22,6 @@ class Device(Entity):
 	def __init__(self,  name,  host):
 		Entity.__init__(self,  name, host)
 
-		printToConsole("Device Created: " + self.name)
-
 		self.timeOffset = 0
 
 		if self.host != None:
@@ -54,6 +52,9 @@ class Device(Entity):
 
 		# Persistence
 		self.watchlist = ["consumption", "plan"]
+
+		openCsv(self.name)
+		self.csvData = []
 
 	def setPlan(self,  plan):
 		self.lockPlanning.acquire()
@@ -102,8 +103,9 @@ class Device(Entity):
 		Entity.startup(self)
 		
 	def shutdown(self):
+		logCsv(self.name, self.csvData)
 		Entity.shutdown(self)
-	
+
 	def logStats(self, time):
 		Entity.logStats(self, time)
 	
@@ -128,7 +130,9 @@ class Device(Entity):
 # 		tags = {'devtype':self.devtype,  'name':self.name}
 # 		values = {measurement:value}
 # 		self.host.logValue(self.type,  tags,  values, time)
-
+		interval = self.host.currentTime - self.host.startTime
+		if interval % 15 == 0:
+			self.csvData.append([interval, self.devtype, measurement, str(value)])
 		data = self.type+",devtype="+self.devtype+",name="+self.name+" "+measurement+"="+str(value)
 		self.host.logValuePrepared(data, time, deltatime)
 
