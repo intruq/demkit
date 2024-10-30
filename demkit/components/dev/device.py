@@ -53,7 +53,6 @@ class Device(Entity):
 		# Persistence
 		self.watchlist = ["consumption", "plan"]
 
-		openCsv(self.name)
 		self.csvData = []
 
 	def setPlan(self,  plan):
@@ -103,6 +102,8 @@ class Device(Entity):
 		Entity.startup(self)
 		
 	def shutdown(self):
+		print("Shutdown device")
+		print(self.name + str(self.csvData[1]))
 		logCsv(self.name, self.csvData)
 		Entity.shutdown(self)
 
@@ -131,6 +132,8 @@ class Device(Entity):
 # 		values = {measurement:value}
 # 		self.host.logValue(self.type,  tags,  values, time)
 		interval = self.host.currentTime - self.host.startTime
+
+		#Modulo 15 used to output one data point every 15 simulated minutes
 		if interval % 15 == 0:
 			self.csvData.append([interval, self.devtype, measurement, str(value)])
 		data = self.type+",devtype="+self.devtype+",name="+self.name+" "+measurement+"="+str(value)
