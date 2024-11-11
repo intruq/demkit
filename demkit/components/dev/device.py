@@ -98,13 +98,10 @@ class Device(Entity):
 	def startup(self):
 		if self.host != None:
 			self.host.addDevice(self)
-
 		Entity.startup(self)
 		
 	def shutdown(self):
-		print("Shutdown device")
-		print(self.name + str(self.csvData[1]))
-		logCsv(self.name, self.csvData)
+		devLogCsv(self.name, self.csvData)
 		Entity.shutdown(self)
 
 	def logStats(self, time):

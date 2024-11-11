@@ -16,6 +16,7 @@
 from core.core import Core
 from usrconf import demCfg
 from util.persistence import Persistence
+from components.util.csvLog import makeCSVs
 import sys
 
 import time
@@ -142,13 +143,14 @@ class Host(Core):
 
 		#write data
 		self.db.writeData(True)
+		makeCSVs()
 
 		# Save the state
 		self.storeStates()
 
 		self.logMsg("Total execution time: "+str(time.time() - self.executionTime))
 		#self.logCsvLine('stats/sim/time', self.name+";"+str(time.time() - self.executionTime) )
-
+		
 		# Do a hard exit
 		exit()
 
