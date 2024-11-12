@@ -53,6 +53,7 @@ class Device(Entity):
 		# Persistence
 		self.watchlist = ["consumption", "plan"]
 
+		print(self.name)
 		self.csvData = []
 
 	def setPlan(self,  plan):

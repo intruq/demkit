@@ -48,15 +48,16 @@ def joinCsv(fileName, fileNameList: list):
 #Calculates how many measurements each input-CSV contains
 def calcListColumnDepth(data: list):
     output = []
+
     for i in range(len(data)):
         output.insert(i, len(data[i][0]) - 1)
     return output
 
 def readCsv(fileName):
+    data = []
+
     if not fileName.endswith('.csv'):
         fileName += '.csv'
-    
-    data = []
 
     # Reading data from a CSV file
     with open("./data/" + fileName, mode='r', newline='') as file:
@@ -95,18 +96,3 @@ def devLogCsv(fileName, data: list):
             dataSorted.append(row)
 
         writeCsv(fileName, dataSorted)
-
-# def logCountInit():
-#     global logCount
-#     logCount = 0
-
-# def logCountDecr():
-#     global logCount
-#     logCount -= 1
-
-# def logCountIncr():
-#     global logCount
-#     logCount += 1
-
-# def getLogCount():
-#     return logCount
