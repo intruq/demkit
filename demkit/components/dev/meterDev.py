@@ -77,9 +77,6 @@ class MeterDev(LoadDev):
 
 	def startup(self):
 		self.lockState.acquire()
-		if "SmartGasMeter" not in self.name:
-			print(self.name)
-			print(self.devices[:])
 		for c in self.commodities:
 			self.consumption[c] = complex(0.0, 0.0)
 

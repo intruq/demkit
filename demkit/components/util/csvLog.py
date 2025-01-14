@@ -1,6 +1,4 @@
 import csv
-import threading
-import time
 
 logCount = 0
 
@@ -8,6 +6,7 @@ def makeCSVs():
     joinCsv("CSV-Load-House", ["Load-House-0", "Load-House-1"])
     joinCsv("CSV-EV", ["ElectricVehicle-House-0", "ElectricVehicle-House-1"])
     joinCsv("CSV-EV-Load-House", ["ElectricVehicle-House-0", "Load-House-0"])
+
 
 def joinCsv(fileName, fileNameList: list):
     joinedData, sourceData, columnDepth, header = [], [], [], ["time"]

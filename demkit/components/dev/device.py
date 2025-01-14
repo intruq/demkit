@@ -53,7 +53,6 @@ class Device(Entity):
 		# Persistence
 		self.watchlist = ["consumption", "plan"]
 
-		print(self.name)
 		self.csvData = []
 
 	def setPlan(self,  plan):
@@ -102,7 +101,6 @@ class Device(Entity):
 		Entity.startup(self)
 		
 	def shutdown(self):
-		devLogCsv(self.name, self.csvData)
 		Entity.shutdown(self)
 
 	def logStats(self, time):
@@ -136,6 +134,9 @@ class Device(Entity):
 			self.csvData.append([interval, self.devtype, measurement, str(value)])
 		data = self.type+",devtype="+self.devtype+",name="+self.name+" "+measurement+"="+str(value)
 		self.host.logValuePrepared(data, time, deltatime)
+
+	def logCsv(self):
+		devLogCsv(self.name, self.csvData)
 
 	def requestPlanning(self):
 		self.zCast(self.controller, "requestPlanning")

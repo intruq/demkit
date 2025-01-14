@@ -132,11 +132,15 @@ class Host(Core):
 
 		for e in self.entities:
 			e.startup()
+			
 
 	def shutdown(self):
 		self.logMsg("Shutting down")
 		for e in self.entities:
 			e.shutdown()
+			if e.type == "devices":
+				e.logCsv()
+
 
 		if self.networkMaster:
 			self.zCall(self.slaves, 'shutdown')
