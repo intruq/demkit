@@ -16,7 +16,6 @@
 from core.core import Core
 from usrconf import demCfg
 from util.persistence import Persistence
-from components.util.csvLog import makeCSVs
 import sys
 
 import time
@@ -147,7 +146,6 @@ class Host(Core):
 
 		#write data
 		self.db.writeData(True)
-		makeCSVs()
 
 		# Save the state
 		self.storeStates()

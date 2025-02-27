@@ -1,13 +1,106 @@
 import csv
 
 def makeCSVs():
-    joinCsv("CSV-Load-House1", ["Load-House-0", "Load-House-1"])
-    joinCsv("CSV-EV", ["ElectricVehicle-House-0", "ElectricVehicle-House-1"])
-    joinCsv("CSV-EV-Load-House", ["ElectricVehicle-House-0", "Load-House-0"])
-    joinCsv("CSV-House-0", ["DomesticHotWater-House-0", "ElectricVehicle-House-0", "GasBoiler-House-0", "Load-House-0", "SmartGasMeter-House-0", "SmartMeter-House-0", "WashingMachine-House-0", "Zone-House-0"])
-    joinCsv("CSV-House-8", ["Load-House-8", "Battery-House-8", "DishWasher-House-8", "DomesticHotWater-House-8", "DomesticHotWaterControllerBoiler-House-8", "HeatPump-House-8", "PV-House-8", "SmartGasMeter-House-8", "SmartMeter-House-8", "WashingMachine-House-8", "Zone-House-8"])
-    joinCsv("CSV-House-8-Electric", ["SmartMeter-House-8", "Battery-House-8", "DishWasher-House-8", "HeatPump-House-8", "Load-House-8", "PV-House-8", "WashingMachine-House-8"])
+    joinCsv("CSV-House-8", ["SmartMeter-House-8", "Battery-House-8", "DishWasher-House-8", "DomesticHotWater-House-8", "DomesticHotWaterControllerBoiler-House-8", "Load-House-8", "HeatPump-House-8", "PV-House-8", "SmartGasMeter-House-8", "WashingMachine-House-8", "Zone-House-8"])
+    joinCsv("CSV-Smart-Meters", ["SmartMeter-House-0", "SmartMeter-House-1", "SmartMeter-House-2", "SmartMeter-House-3", "SmartMeter-House-4", "SmartMeter-House-5", "SmartMeter-House-6", "SmartMeter-House-7", "SmartMeter-House-8", "SmartMeter-House-9"]) #S2 & S6
 
+    shortenCSV("CSV-House-8")
+    shortenCSV("CSV-Smart-Meters")
+
+    modifierS1(True)
+    modifierS1(False)
+    modifierS2()
+    modifierS3(True)
+    modifierS3(False)
+    modifierS4()
+    modifierS5()
+    modifierS6()
+
+def modifierS1(option: bool):
+    data = readCsv("CSV-House-8-short")
+
+    if(option): # Smart Meter Value incorrect
+        for i in range(1, len(data)):
+            data[i][1] = float(data[i][1]) + 100
+        writeCsv("CSV-MOD-S1-1", data) 
+    else: # Device Values incorrect
+        for i in range(1, len(data)):
+            data[i][4] = float(data[i][4]) + 100
+            data[i][7] = float(data[i][7]) + 100
+            data[i][8] = float(data[i][8]) + 100
+        writeCsv("CSV-MOD-S1-2", data)
+
+def modifierS2():
+    data = readCsv("CSV-Smart-Meters-short")
+    for i in range(1, len(data)):
+            data[i][i % 10] = 12001
+    writeCsv("CSV-MOD-S2", data)
+
+def modifierS3(option: bool):
+    data = readCsv("CSV-House-8-short")
+
+    if(option): # Battery soc over/under 100%/0% (12000 Wh Capacity)
+        for i in range(1, len(data)):
+            if(i % 2 == 1):
+                data[i][3] = 12001
+            else:
+                data[i][3] = -1
+        writeCsv("CSV-MOD-S3-1", data) 
+    else: # Battery Charging while full/discharging while empty
+        for i in range(1, len(data)):
+            if(i % 2 == 1):
+                data[i][3] = 12000 #soc
+                data[i][2] = 100 #current
+            else:
+                data[i][3] = 0 #soc
+                data[i][2] = -100 #current
+        writeCsv("CSV-MOD-S3-2", data) 
+
+def modifierS4():
+    data = readCsv("CSV-House-8-short")
+    for i in range(1, len(data)):
+            data[i][4] = -1
+    writeCsv("CSV-MOD-S4", data)
+
+def modifierS5():
+    data = readCsv("CSV-House-8-short")
+    for i in range(1, len(data)):
+            if(i % 2 == 1):
+                data[i][2] = 3800
+            else:
+                data[i][2] = -3800
+    writeCsv("CSV-MOD-S5", data)
+
+def modifierS6():
+    data = readCsv("CSV-Smart-Meters-short")
+    for i in range(1, len(data)):
+            if i % 3 == 0:
+                var = 0
+            elif i % 3 == 1:
+                var = 5000
+            else:
+                var = 10000
+            data[i][1] = var
+    writeCsv("CSV-MOD-S6", data)
+
+def modifierS7():
+    True
+
+# Removes all columns not needed in the IDS for clarity
+def shortenCSV(source: str):
+    sourceData = readCsv(source)
+    headerIndices = [0]
+    columnCount = len(sourceData[0])
+
+    for i in range(columnCount):
+        header = sourceData[0][i]
+        if ("power.real.c.ELECTRICITY" in header) or ("energy.soc" in header):
+            headerIndices.append(i)
+
+    output = [[val for j, val in enumerate(row) if j in headerIndices] for row in sourceData]
+    writeCsv(source + "-short", output)
+
+# Joins CSVs from the fileNameList
 def joinCsv(fileName, fileNameList: list):
     joinedData, sourceData, columnDepth, header = [], [], [], ["time"]
 
@@ -59,6 +152,7 @@ def calcListColumnDepth(data: list):
             output.insert(i, 0)
     return output
 
+# Input: CSV, Output: List
 def readCsv(fileName):
     data = []
 
@@ -73,6 +167,7 @@ def readCsv(fileName):
 
     return data
 
+# Input: List, Output: CSV
 def writeCsv(fileName, data: list):
     if not fileName.endswith('.csv'):
         fileName += '.csv'
