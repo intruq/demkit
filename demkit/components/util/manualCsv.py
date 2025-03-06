@@ -1,20 +1,22 @@
 import csv
 
 def makeCSVs():
-    joinCsv("CSV-House-8", ["SmartMeter-House-8", "Battery-House-8", "DishWasher-House-8", "DomesticHotWater-House-8", "DomesticHotWaterControllerBoiler-House-8", "Load-House-8", "HeatPump-House-8", "PV-House-8", "SmartGasMeter-House-8", "WashingMachine-House-8", "Zone-House-8"])
-    joinCsv("CSV-Smart-Meters", ["SmartMeter-House-0", "SmartMeter-House-1", "SmartMeter-House-2", "SmartMeter-House-3", "SmartMeter-House-4", "SmartMeter-House-5", "SmartMeter-House-6", "SmartMeter-House-7", "SmartMeter-House-8", "SmartMeter-House-9"]) #S2 & S6
+    joinCsv("CSV-House-1", ["SmartMeter-House-1", "Load-House-1", "WashingMachine-House-1", "Dishwasher-House-1", "ElectricVehicle-House-1", "Heatpump-House-1", "DomesticHotWaterControllerBoiler-House-1", "PV-House-1"])
+    joinCsv("CSV-House-4", ["SmartMeter-House-4", "Load-House-4", "WashingMachine-House-4", "ElectricVehicle-House-4"])
+    joinCsv("CSV-House-8", ["SmartMeter-House-8", "Load-House-8", "WashingMachine-House-8", "Dishwasher-House-8", "Battery-House-8", "Heatpump-House-8", "DomesticHotWaterControllerBoiler-House-8", "PV-House-8"])
 
+    shortenCSV("CSV-House-1")
+    shortenCSV("CSV-House-4")
     shortenCSV("CSV-House-8")
-    shortenCSV("CSV-Smart-Meters")
 
-    modifierS1(True)
-    modifierS1(False)
-    modifierS2()
-    modifierS3(True)
-    modifierS3(False)
-    modifierS4()
-    modifierS5()
-    modifierS6()
+    #modifierS1(True)
+    #modifierS1(False)
+    #modifierS2()
+    #modifierS3(True)
+    #modifierS3(False)
+    #modifierS4()
+    #modifierS5()
+    #modifierS6()
 
 def modifierS1(option: bool):
     data = readCsv("CSV-House-8-short")
@@ -98,7 +100,7 @@ def shortenCSV(source: str):
             headerIndices.append(i)
 
     output = [[val for j, val in enumerate(row) if j in headerIndices] for row in sourceData]
-    writeCsv(source + "-short", output)
+    writeCsv("att_scenario_1/" + source + "-short", output)
 
 # Joins CSVs from the fileNameList
 def joinCsv(fileName, fileNameList: list):
