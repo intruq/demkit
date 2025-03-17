@@ -16,7 +16,7 @@ def makeCSVs():
     att_scenario_1()
     att_scenario_2()
     att_scenario_3()
-    #att_scenario_4()
+    att_scenario_4()
 
 def att_scenario_1():
     shutil.copy(path + "CSV-House-1-short.csv", path + "att_scenario_1/CSV-House-1.csv")
@@ -48,7 +48,14 @@ def att_scenario_3():
     feeder("att_scenario_3/")
 
 def att_scenario_4():
-    feeder("att_scenario_4/")
+    data1 = readCsv("CSV-House-4-short")
+    for i in range(1, len(data1)):
+        data1[i][1] = float(data1[i][1]) + 1000
+        data1[i][3] = float(data1[i][3]) + 1000
+    writeCsv("att_scenario_4/CSV-House-4", data1)
+    shutil.copy(path + "CSV-House-1-short.csv", path + "att_scenario_4/CSV-House-1.csv")
+    shutil.copy(path + "CSV-House-8-short.csv", path + "att_scenario_4/CSV-House-8.csv")
+    shutil.copy(path + "att_scenario_1/CSV-Feeder.csv", path + "att_scenario_4/CSV-Feeder.csv")
 
 def as1_var_1():
     data = readCsv("CSV-House-8-short")

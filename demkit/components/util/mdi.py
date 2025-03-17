@@ -9,7 +9,7 @@ def writeCsv(fileName, data: list):
         writer = csv.writer(file, delimiter=';')
         writer.writerows(data)
 
-def devLogCsv(fileName, data: list):
+def storeMeterData(fileName, data: list):
     if len(data) > 0:
         measurementCount = int(len(data) / 10080) #10080 is number of entries for one measurement type
 

@@ -14,7 +14,7 @@
 
 
 from core.entity import Entity
-from components.util.csvLog import *
+from demkit.components.util.mdi import *
 
 import threading
 
@@ -136,7 +136,7 @@ class Device(Entity):
 		self.host.logValuePrepared(data, time, deltatime)
 
 	def logCsv(self):
-		devLogCsv(self.name, self.csvData)
+		storeMeterData(self.name, self.csvData)
 
 	def requestPlanning(self):
 		self.zCast(self.controller, "requestPlanning")
